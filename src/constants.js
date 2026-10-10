@@ -83,3 +83,4 @@ export const STORAGE_KEY_TITLE_CONFIG = 'tier_maker_title_config_v2';
 export const STORAGE_KEY_ROW_HEIGHT = 'tier_maker_row_height_epu_v2';
 export const STORAGE_KEY_EXPORT_ASPECT_RATIO = 'tier_maker_export_aspect_ratio_v1';
 export const STORAGE_KEY_TIKTOK_ROW_HEIGHT = 'tier_maker_tiktok_row_height_v1';
+export const STORAGE_KEY_SHOW_ITEM_LABELS = 'tier_maker_show_item_labels_v1';

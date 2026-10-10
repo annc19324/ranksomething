@@ -23,7 +23,8 @@ export default function TierRow({
   onOpenAdjust,
   rowHeight = 95, // Height of the ranking row
   cardSize = 'md',
-  fitMode = 'contain'
+  fitMode = 'contain',
+  showItemLabels = true
 }) {
   const [isDragOver, setIsDragOver] = useState(false);
   const [isEditingLabel, setIsEditingLabel] = useState(false);
@@ -195,6 +196,7 @@ export default function TierRow({
             autoWidth={true}
             size={cardSize}
             fitMode={fitMode}
+            showItemLabels={showItemLabels}
             onClick={onItemClick}
             onDropOnItem={handleDropOnItem}
             onOpenAdjust={onOpenAdjust}

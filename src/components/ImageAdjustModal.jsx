@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { X, ZoomIn, ZoomOut, Move, RotateCcw, Check, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Eye } from 'lucide-react';
+import { shouldShowItemName } from '../utils/imageUtils';
 
 export default function ImageAdjustModal({
   item,
   isOpen,
   onClose,
-  onSaveAdjustments
+  onSaveAdjustments,
+  showItemLabels = true
 }) {
   if (!isOpen || !item) return null;
 
@@ -56,7 +58,7 @@ export default function ImageAdjustModal({
             <div>
               <h3 className="font-bold text-base text-white">Chỉnh vị trí & kích cỡ ảnh</h3>
               <p className="text-xs text-zinc-400 truncate max-w-[240px]">
-                {item.name || 'Ảnh tùy chỉnh'}
+                {shouldShowItemName(item) ? item.name : 'Ảnh tùy chỉnh'}
               </p>
             </div>
           </div>
@@ -78,7 +80,7 @@ export default function ImageAdjustModal({
             <div className="relative w-36 h-36 sm:w-44 sm:h-44 rounded-xl overflow-hidden bg-black border-2 border-amber-400/80 shadow-xl flex items-center justify-center">
               <img
                 src={item.image}
-                alt={item.name}
+                alt={shouldShowItemName(item) ? item.name : 'Ảnh chỉnh sửa'}
                 className={`w-full h-full pointer-events-none select-none transition-transform duration-75 ${
                   fitMode === 'contain' ? 'object-contain' : 'object-cover'
                 }`}
@@ -94,7 +96,7 @@ export default function ImageAdjustModal({
                 <div className="h-full w-[1px] bg-white/15 absolute"></div>
               </div>
 
-              {item.name && (
+              {showItemLabels && shouldShowItemName(item) && (
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent p-1 pt-3 text-center pointer-events-none">
                   <p className="text-xs font-bold text-white truncate drop-shadow">
                     {item.name}

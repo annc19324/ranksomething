@@ -41,18 +41,13 @@ export function processImageFile(file, maxDimension = 320) {
         const isPng = file.type === 'image/png';
         const dataUrl = canvas.toDataURL(isPng ? 'image/png' : 'image/jpeg', 0.88);
 
-        let cleanName = file.name
-          ? file.name.replace(/\.[^/.]+$/, '').trim()
-          : '';
-        if (cleanName.toLowerCase().includes('clipboard')) {
-          cleanName = '';
-        }
-
+        // Do not store arbitrary disk filenames (such as 'hqdefault', 'image', etc.)
+        // as the item's display label. Custom uploaded images should remain clean without unwanted label overlays.
         resolve({
           id: generateId('custom'),
-          name: cleanName,
+          name: '',
           image: dataUrl,
-          subtitle: cleanName ? 'Tự tải lên' : '',
+          subtitle: '',
           isCustom: true
         });
       };
@@ -61,6 +56,59 @@ export function processImageFile(file, maxDimension = 320) {
     reader.readAsDataURL(file);
   });
 }
+
+/**
+ * Determines whether an item should display a text label overlay.
+ * Custom uploaded images, filenames, and generic labels like 'hqdefault', 'clipboard',
+ * 'ảnh url', etc. are strictly excluded.
+ */
+export function shouldShowItemName(item) {
+  if (!item) return false;
+  // Custom items should NEVER display a bottom label overlay
+  if (item.isCustom) return false;
+  if (item.id && (String(item.id).startsWith('custom_') || String(item.id).startsWith('url_'))) {
+    return false;
+  }
+
+  const name = item.name ? String(item.name).trim() : '';
+  if (!name) return false;
+
+  const lower = name.toLowerCase();
+
+  // Keyword check: blacklist any filename / placeholder / generic notes
+  const blockedKeywords = [
+    'clipboard',
+    'hqdefault',
+    'maxresdefault',
+    'sddefault',
+    'mqdefault',
+    'default',
+    'ảnh url',
+    'ảnh tải lên',
+    'tự tải lên',
+    'ảnh custom',
+    'image',
+    'download',
+    'screenshot',
+    'unnamed',
+    'thumb',
+    'thumbnail',
+    'photo',
+    'picture'
+  ];
+
+  if (blockedKeywords.some((kw) => lower.includes(kw))) {
+    return false;
+  }
+
+  // Any text containing file extension pattern: .jpg, .jpeg, .png, .webp, .svg, .avif, .gif, .bmp
+  if (/\.(jpe?g|png|webp|gif|svg|avif|bmp)$/i.test(lower)) {
+    return false;
+  }
+
+  return true;
+}
+
 
 /**
  * Process multiple files concurrently

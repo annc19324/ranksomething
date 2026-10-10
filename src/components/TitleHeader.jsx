@@ -13,7 +13,9 @@ import { TITLE_COLORS } from '../constants';
 
 export default function TitleHeader({
   titleConfig,
-  onChangeTitleConfig
+  onChangeTitleConfig,
+  showItemLabels = true,
+  onToggleShowItemLabels
 }) {
   const [isEditingText, setIsEditingText] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -230,6 +232,25 @@ export default function TitleHeader({
                 </button>
               </div>
             </div>
+
+            {/* Show/Hide Item Labels Toggle */}
+            {onToggleShowItemLabels && (
+              <div className="flex items-center gap-2">
+                <span className="text-zinc-400 font-medium">Tên trên ảnh:</span>
+                <button
+                  type="button"
+                  onClick={onToggleShowItemLabels}
+                  className={`px-2.5 py-1 rounded-md transition text-[11px] font-semibold ${
+                    showItemLabels
+                      ? 'bg-amber-400 text-zinc-950 font-bold shadow'
+                      : 'bg-zinc-800 text-zinc-400 hover:text-white'
+                  }`}
+                  title="Bật/Tắt nhãn tên hiển thị bên dưới ảnh"
+                >
+                  {showItemLabels ? 'Hiện' : 'Ẩn'}
+                </button>
+              </div>
+            )}
 
             <button
               type="button"

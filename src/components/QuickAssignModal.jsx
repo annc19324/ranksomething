@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, Archive, Sliders, ArrowRight } from 'lucide-react';
 import { getContrastTextColor } from '../utils/colorUtils';
+import { shouldShowItemName } from '../utils/imageUtils';
 
 export default function QuickAssignModal({
   item,
@@ -23,12 +24,12 @@ export default function QuickAssignModal({
           <div className="flex items-center gap-3">
             <img 
               src={item.image} 
-              alt={item.name} 
+              alt={shouldShowItemName(item) ? item.name : 'Ảnh'} 
               className="w-12 h-12 rounded-lg object-cover border border-zinc-700 shadow"
             />
             <div>
-              <h3 className="font-bold text-base text-white">{item.name || 'Ảnh đã chọn'}</h3>
-              <p className="text-xs text-zinc-400">{item.subtitle || 'Chọn bậc hoặc chỉnh ảnh'}</p>
+              <h3 className="font-bold text-base text-white">{shouldShowItemName(item) ? item.name : 'Ảnh đã chọn'}</h3>
+              <p className="text-xs text-zinc-400">Chọn bậc hoặc chỉnh ảnh</p>
             </div>
           </div>
           <button

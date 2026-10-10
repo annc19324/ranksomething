@@ -8,6 +8,7 @@ import {
   DEFAULT_TIKTOK_ROW_HEIGHT 
 } from '../constants';
 import { getContrastTextColor } from '../utils/colorUtils';
+import { shouldShowItemName } from '../utils/imageUtils';
 
 /**
  * Ensures all images inside a container are fully loaded before capturing
@@ -226,7 +227,8 @@ export default function ExportModal({
   title,
   titleConfig,
   tiers = [],
-  itemsMap = {}
+  itemsMap = {},
+  showItemLabels = true
 }) {
   if (!isOpen) return null;
 
@@ -488,7 +490,7 @@ export default function ExportModal({
                       >
                         <img
                           src={item.image}
-                          alt={item.name}
+                          alt={shouldShowItemName(item) ? item.name : 'Hình ảnh'}
                           className="pointer-events-none select-none block max-w-none"
                           style={{
                             height: `${tiktokRowHeight}px`,
@@ -501,7 +503,7 @@ export default function ExportModal({
                             transformOrigin: 'center center'
                           }}
                         />
-                        {item.name && !item.name.toLowerCase().includes('clipboard') && (
+                        {showItemLabels && shouldShowItemName(item) && (
                           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/80 to-transparent p-1 pt-3 text-center pointer-events-none">
                             <p className="text-xs font-bold text-white truncate drop-shadow-sm leading-tight px-1.5">
                               {item.name}

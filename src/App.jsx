@@ -17,11 +17,12 @@ import {
   STORAGE_KEY_TIERS, 
   STORAGE_KEY_ITEMS, 
   STORAGE_KEY_TITLE_CONFIG,
-  STORAGE_KEY_ROW_HEIGHT 
+  STORAGE_KEY_ROW_HEIGHT,
+  STORAGE_KEY_SHOW_ITEM_LABELS
 } from './constants';
 import { generateId } from './utils/colorUtils';
 import { processClipboardEvent } from './utils/imageUtils';
-import { Download, Plus, RotateCcw, CheckCircle, Info } from 'lucide-react';
+import { Download, Plus, RotateCcw, CheckCircle, Info, Type } from 'lucide-react';
 
 export default function App() {
   // 1. Title Configuration State (text, color, align, fontSize)
@@ -47,11 +48,37 @@ export default function App() {
           }
         });
 
-        // Clean up any items that were previously given a 'clipboard' label
+        // Clean up any items that were previously given 'clipboard', 'hqdefault', file names, or generic labels
         Object.keys(parsed).forEach((key) => {
-          if (parsed[key].name && parsed[key].name.toLowerCase().includes('clipboard')) {
-            parsed[key].name = '';
-            parsed[key].subtitle = '';
+          const it = parsed[key];
+          if (!it) return;
+          if (it.isCustom || key.startsWith('custom_') || key.startsWith('url_')) {
+            it.name = '';
+            it.subtitle = '';
+          } else if (it.name) {
+            const lower = String(it.name).toLowerCase().trim();
+            const badKeywords = [
+              'clipboard',
+              'hqdefault',
+              'maxresdefault',
+              'sddefault',
+              'mqdefault',
+              'default',
+              'ảnh url',
+              'ảnh tải lên',
+              'tự tải lên',
+              'image',
+              'download',
+              'screenshot',
+              'unnamed'
+            ];
+            if (
+              badKeywords.some((kw) => lower.includes(kw)) ||
+              /\.(jpe?g|png|webp|gif|svg|avif|bmp)$/i.test(lower)
+            ) {
+              it.name = '';
+              it.subtitle = '';
+            }
           }
         });
         return parsed;
@@ -157,6 +184,23 @@ export default function App() {
       console.warn('Lỗi khi lưu rowHeight vào LocalStorage:', err);
     }
   }, [rowHeight]);
+
+  // Show/Hide labels on cards (defaults to true for preset rappers, but custom items & filenames are always suppressed)
+  const [showItemLabels, setShowItemLabels] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_SHOW_ITEM_LABELS);
+      if (saved !== null) return JSON.parse(saved);
+    } catch (e) {}
+    return true;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY_SHOW_ITEM_LABELS, JSON.stringify(showItemLabels));
+    } catch (err) {
+      console.warn('Lỗi khi lưu showItemLabels vào LocalStorage:', err);
+    }
+  }, [showItemLabels]);
 
   // Global Clipboard Paste Listener (Ctrl + V)
   useEffect(() => {
@@ -477,6 +521,8 @@ export default function App() {
             <TitleHeader
               titleConfig={titleConfig}
               onChangeTitleConfig={setTitleConfig}
+              showItemLabels={showItemLabels}
+              onToggleShowItemLabels={() => setShowItemLabels(!showItemLabels)}
             />
 
             {/* Tier Rows (Matching user screenshot: A, B, C, D, E, F, G) */}
@@ -508,6 +554,7 @@ export default function App() {
                     rowHeight={rowHeight}
                     cardSize={boardCardSize}
                     fitMode={boardFitMode}
+                    showItemLabels={showItemLabels}
                   />
                 );
               })}
@@ -593,6 +640,21 @@ export default function App() {
               </div>
             </div>
 
+            {/* Toggle show/hide item labels */}
+            <button
+              type="button"
+              onClick={() => setShowItemLabels(!showItemLabels)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition ${
+                showItemLabels
+                  ? 'bg-zinc-800/90 text-amber-300 border-amber-400/30 hover:bg-zinc-700'
+                  : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-white'
+              }`}
+              title="Bật hoặc tắt nhãn tên hiển thị bên dưới ảnh"
+            >
+              <Type size={13} className={showItemLabels ? 'text-amber-400' : 'text-zinc-500'} />
+              <span>Tên trên ảnh: {showItemLabels ? 'Hiện' : 'Ẩn'}</span>
+            </button>
+
             <button
               onClick={() => setIsExportOpen(true)}
               className="flex items-center gap-1.5 px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg shadow-md transition transform active:scale-95"
@@ -614,6 +676,7 @@ export default function App() {
           onDeleteCustomItem={handleDeleteCustomItem}
           onReloadDefaultPhotos={handleReloadDefaultPhotos}
           onOpenAdjust={setAdjustingItem}
+          showItemLabels={showItemLabels}
         />
       </main>
 
@@ -656,6 +719,7 @@ export default function App() {
         isOpen={Boolean(adjustingItem)}
         onClose={() => setAdjustingItem(null)}
         onSaveAdjustments={handleSaveAdjustments}
+        showItemLabels={showItemLabels}
       />
 
       <ExportModal
@@ -666,6 +730,7 @@ export default function App() {
         titleConfig={titleConfig}
         tiers={tiers}
         itemsMap={itemsMap}
+        showItemLabels={showItemLabels}
       />
 
       <HelpModal

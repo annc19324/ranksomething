@@ -28,7 +28,8 @@ export default function ItemPool({
   onClearAllToPool,
   onDeleteCustomItem,
   onReloadDefaultPhotos,
-  onOpenAdjust
+  onOpenAdjust,
+  showItemLabels = true
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isDragOver, setIsDragOver] = useState(false);
@@ -40,11 +41,14 @@ export default function ItemPool({
   const [cardSize, setCardSize] = useState('md'); // 'sm', 'md', 'lg'
   const fileInputRef = useRef(null);
 
-  // Filter items by search query
-  const filteredItems = items.filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (item.subtitle && item.subtitle.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  // Filter items by search query safely
+  const filteredItems = items.filter((item) => {
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase().trim();
+    const nameMatch = item.name ? item.name.toLowerCase().includes(q) : false;
+    const subMatch = item.subtitle ? item.subtitle.toLowerCase().includes(q) : false;
+    return nameMatch || subMatch;
+  });
 
   // Handle Drag & Drop to Pool (from tiers or files from desktop)
   const handleDragOver = (e) => {
@@ -125,9 +129,9 @@ export default function ItemPool({
 
     const newItem = {
       id: generateId('url'),
-      name: imageName.trim() || 'Ảnh URL',
+      name: imageName.trim(),
       image: imageUrl.trim(),
-      subtitle: 'Đường dẫn URL',
+      subtitle: '',
       isCustom: true
     };
 
@@ -382,6 +386,7 @@ export default function ItemPool({
                 autoWidth={true}
                 size={cardSize}
                 fitMode={fitMode}
+                showItemLabels={showItemLabels}
                 onClick={onItemClick}
                 onDelete={item.isCustom ? onDeleteCustomItem : undefined}
                 onOpenAdjust={onOpenAdjust}

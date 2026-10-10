@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, ArrowRightLeft, Sliders, ImageOff } from 'lucide-react';
+import { shouldShowItemName } from '../utils/imageUtils';
 
 export default function ItemCard({
   item,
@@ -14,7 +15,8 @@ export default function ItemCard({
   rowHeight = 95,
   autoWidth = true, // Natural width preserving original aspect ratio
   size = 'md',
-  fitMode = 'contain'
+  fitMode = 'contain',
+  showItemLabels = true
 }) {
   const [isDragOver, setIsDragOver] = useState(false);
   const [imgError, setImgError] = useState(false);
@@ -91,6 +93,8 @@ export default function ItemCard({
   const posY = item.posY ?? 0;
   const hasTransform = (zoom !== 100 || posX !== 0 || posY !== 0);
 
+  const hasValidName = shouldShowItemName(item);
+
   // Generate fallback avatar SVG if image fails
   const renderFallback = () => (
     <div 
@@ -98,13 +102,19 @@ export default function ItemCard({
       style={{ height: `${rowHeight}px`, minWidth: `${Math.round(rowHeight * 0.8)}px` }}
     >
       <div className="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center text-xs mb-1">
-        {item.name ? item.name.substring(0, 2).toUpperCase() : 'VN'}
+        {hasValidName && item.name ? item.name.substring(0, 2).toUpperCase() : 'VN'}
       </div>
-      <span className="text-[10px] text-zinc-300 font-semibold truncate max-w-full px-1">
-        {item.name}
-      </span>
+      {hasValidName && item.name && (
+        <span className="text-[10px] text-zinc-300 font-semibold truncate max-w-full px-1">
+          {item.name}
+        </span>
+      )}
     </div>
   );
+
+  const cardTitle = hasValidName && item.name
+    ? `${item.name}${item.subtitle ? ` (${item.subtitle})` : ''} - Kéo để đổi chỗ hoặc click để chọn nhanh bậc`
+    : 'Kéo để đổi chỗ hoặc click để chọn nhanh bậc';
 
   return (
     <div
@@ -133,12 +143,12 @@ export default function ItemCard({
             }
           : undefined
       }
-      title={`${item.name}${item.subtitle ? ` (${item.subtitle})` : ''} - Kéo để đổi chỗ hoặc click để chọn nhanh bậc`}
+      title={cardTitle}
     >
       {!imgError && item.image ? (
         <img
           src={item.image}
-          alt={item.name}
+          alt={hasValidName ? item.name : 'Hình ảnh'}
           onError={() => setImgError(true)}
           className="pointer-events-none select-none block max-w-none"
           style={{
@@ -155,8 +165,8 @@ export default function ItemCard({
         renderFallback()
       )}
 
-      {/* Bottom gradient label with artist name (only if item has a valid name and not generic note) */}
-      {item.name && !item.name.toLowerCase().includes('clipboard') && (
+      {/* Bottom gradient label with artist name (never shown on custom/uploaded images, filenames, or when toggled off) */}
+      {showItemLabels && hasValidName && (
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/80 to-transparent p-1 pt-3 text-center pointer-events-none">
           <p className="text-[10px] sm:text-xs font-bold text-white truncate drop-shadow-sm leading-tight px-1">
             {item.name}
