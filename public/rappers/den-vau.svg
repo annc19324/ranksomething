@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <defs>
+    <linearGradient id="bg_den-vau" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1b2838" />
+      <stop offset="50%" stop-color="#0d5c46" />
+      <stop offset="100%" stop-color="#0a0c10" />
+    </linearGradient>
+    <radialGradient id="glow_den-vau" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#34d399" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="240" height="240" rx="12" fill="url(#bg_den-vau)" />
+  <circle cx="120" cy="95" r="75" fill="url(#glow_den-vau)" />
+
+  <!-- Outer Border -->
+  <rect x="2" y="2" width="236" height="236" rx="10" fill="none" stroke="#34d399" stroke-width="2" stroke-opacity="0.4" />
+
+  <!-- Stylized Avatar Emblem -->
+  <circle cx="120" cy="85" r="44" fill="#0f131a" stroke="#34d399" stroke-width="2.5" />
+  <circle cx="120" cy="85" r="38" fill="#1b2838" fill-opacity="0.6" />
+  
+  <g transform="translate(108, 73)">
+    <svg viewBox="0 0 24 24" width="24" height="24">
+      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" fill="#34d399"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8" stroke="#34d399" stroke-width="2" stroke-linecap="round" fill="none"/>
+    </svg>
+  </g>
+
+  <!-- Sub-badge -->
+  <g transform="translate(120, 142)">
+    <rect x="-55" y="-10" width="110" height="20" rx="10" fill="#34d399" fill-opacity="0.2" stroke="#34d399" stroke-width="1"/>
+    <text x="0" y="4" fill="#34d399" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="700" text-anchor="middle" letter-spacing="0.5">VIET RAP</text>
+  </g>
+
+  <!-- Artist Name Box -->
+  <rect x="10" y="160" width="220" height="68" rx="8" fill="#0b0e14" fill-opacity="0.88" />
+  <text x="120" y="190" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" font-weight="800" text-anchor="middle">
+    Đen Vâu
+  </text>
+  <text x="120" y="212" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="500" text-anchor="middle">
+    Triệu phú lời ca
+  </text>
+</svg>

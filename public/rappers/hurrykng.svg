@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <defs>
+    <linearGradient id="bg_hurrykng" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#075985" />
+      <stop offset="50%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#0a0c10" />
+    </linearGradient>
+    <radialGradient id="glow_hurrykng" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="240" height="240" rx="12" fill="url(#bg_hurrykng)" />
+  <circle cx="120" cy="95" r="75" fill="url(#glow_hurrykng)" />
+
+  <!-- Outer Border -->
+  <rect x="2" y="2" width="236" height="236" rx="10" fill="none" stroke="#38bdf8" stroke-width="2" stroke-opacity="0.4" />
+
+  <!-- Stylized Avatar Emblem -->
+  <circle cx="120" cy="85" r="44" fill="#0f131a" stroke="#38bdf8" stroke-width="2.5" />
+  <circle cx="120" cy="85" r="38" fill="#075985" fill-opacity="0.6" />
+  
+  <g transform="translate(108, 73)">
+    <svg viewBox="0 0 24 24" width="24" height="24">
+      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#38bdf8"/>
+    </svg>
+  </g>
+
+  <!-- Sub-badge -->
+  <g transform="translate(120, 142)">
+    <rect x="-55" y="-10" width="110" height="20" rx="10" fill="#38bdf8" fill-opacity="0.2" stroke="#38bdf8" stroke-width="1"/>
+    <text x="0" y="4" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="700" text-anchor="middle" letter-spacing="0.5">VIET RAP</text>
+  </g>
+
+  <!-- Artist Name Box -->
+  <rect x="10" y="160" width="220" height="68" rx="8" fill="#0b0e14" fill-opacity="0.88" />
+  <text x="120" y="190" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" font-weight="800" text-anchor="middle">
+    HURRYKNG
+  </text>
+  <text x="120" y="212" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="500" text-anchor="middle">
+    Gerdnang / Một công đôi việc
+  </text>
+</svg>
